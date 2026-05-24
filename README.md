@@ -63,6 +63,14 @@ Lastleaf is designed to be boring in the best sense of the word.
 
 **Respectful of the original model.** Lastleaf does not recover forgotten passwords and does not weaken Meld Encrypt. It only preserves access for the person who already has both the ciphertext and the password.
 
+## Note
+
+Encryption is a promise made across time. It protects a private present, but it also asks the future to remember enough context to open what was sealed.
+
+Software does not always keep that promise for us. Plugins disappear, APIs drift, platforms change shape, and old machines become hard to recreate. Lastleaf is a small answer to that fragility: keep the recovery path simple enough that it can survive without ceremony.
+
+The point is not to distrust tools. The point is to avoid confusing a tool with ownership. If the notes are yours, the password is yours, and the ciphertext is yours, the ability to return to them should remain yours as well.
+
 ## Security Boundaries
 
 Lastleaf can help when:
