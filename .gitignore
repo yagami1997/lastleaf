@@ -1,0 +1,64 @@
+# OS metadata and trash
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Local archives / generated copies
+lastleaf.html
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+.tmp/
+tmp/
+temp/
+
+# Dependency and build output directories
+node_modules/
+dist/
+build/
+out/
+.parcel-cache/
+.vite/
+.next/
+.nuxt/
+.svelte-kit/
+
+# Editor and IDE project files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# AI coding assistants and local agent state
+.codex/
+.claude/
+.cursor/
+.cursorignore
+.continue/
+.windsurf/
+.aider*
+.cody/
+.github/copilot-instructions.local.md
+CLAUDE.local.md
+GEMINI.local.md
+AGENTS.local.md
