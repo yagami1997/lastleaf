@@ -145,7 +145,10 @@ Released under the [MIT License](LICENSE).
 
 <div align="center">
 
-Lastleaf is made for future access, quiet recovery, and ownership that survives its tools.
+🍂 Lastleaf  
+Created · May 23, 2026, 8:51 PM PDT  
+Updated · May 24, 2026, 5:22 AM PDT  
+© 2026 MUMU · [MIT License](LICENSE)
 
 <em>Seek truth from facts.</em>
 
