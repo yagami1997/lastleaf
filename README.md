@@ -16,7 +16,7 @@ It exists for a narrow recovery case: you still have the encrypted notes, you st
 
 No server. No account. No build step. No telemetry.
 
-Created in Los Angeles on **May 23, 2026 at 8:51 PM PDT**.
+Created in La Jolla on **May 23, 2026 at 8:51 PM PDT**.
 
 ## ✦ Overview
 
