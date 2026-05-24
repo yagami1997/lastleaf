@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lastleaf — Meld Encrypt Recovery Toolkit</title>
+<meta name="description" content="An independent, offline, auditable recovery tool for Meld Encrypt. When the original plugin is gone, you can still open your own notes.">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="alternate icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+<meta name="theme-color" content="#2f4a30">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..700,0..100&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --green-deep: #2f4a30;
+  --green-darker: #243a25;
+  --green-mid: #3c5a3d;
+  --green-leaf: #5f7d4f;
+  --cream: #f3e8d4;
+  --cream-soft: #ecdfc7;
+  --cream-dim: #d9cbb0;
+  --ink: #1f2a1f;
+  --ink-soft: #4a574a;
+  --ink-faint: #8a8470;
+  --gold: #b89150;
+  --gold-deep: #8a6a35;
+  --rust: #a85a3c;
+  --moss: #6d8a4e;
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', 'Consolas', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--cream);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.hero {
+  background: var(--green-deep);
+  color: var(--cream);
+  padding: 80px 24px 200px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(243,232,212,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243,232,212,0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(95,125,79,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 48px;
+  animation: fadeUp 0.7s ease-out;
+}
+.logo { width: 56px; height: 56px; flex-shrink: 0; }
+.brand-text h1 {
+  font-family: var(--serif);
+  font-size: 52px;
+  font-weight: 400;
+  font-variation-settings: 'opsz' 144, 'SOFT' 30;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  line-height: 1;
+}
+.brand-text .meta {
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(243,232,212,0.55);
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.tagline {
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: 300;
+  font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  max-width: 720px;
+  margin-bottom: 18px;
+  animation: fadeUp 0.7s ease-out 0.1s both;
+}
+.tagline em {
+  font-style: italic;
+  color: var(--gold);
+  font-variation-settings: 'opsz' 144, 'SOFT' 80;
+}
+.subtitle {
+  font-size: 16px;
+  color: rgba(243,232,212,0.7);
+  max-width: 620px;
+  line-height: 1.7;
+  animation: fadeUp 0.7s ease-out 0.2s both;
+}
+.subtitle code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: rgba(243,232,212,0.08);
+  padding: 1px 7px;
+  border-radius: 2px;
+  color: var(--gold);
+}
+
+main {
+  max-width: 980px;
+  margin: -140px auto 0;
+  padding: 0 24px 80px;
+  position: relative;
+  z-index: 2;
+}
+
+.alert {
+  background: var(--cream-soft);
+  border: 1px solid var(--cream-dim);
+  border-left: 4px solid var(--gold);
+  padding: 16px 22px;
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  animation: fadeUp 0.7s ease-out 0.3s both;
+}
+.alert strong { color: var(--ink); font-weight: 600; }
+.alert .label {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-right: 8px;
+  vertical-align: 1px;
+}
+.alert code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: rgba(184,145,80,0.12);
+  padding: 1px 5px;
+  color: var(--gold-deep);
+}
+
+.card {
+  background: var(--cream);
+  border: 1px solid var(--cream-dim);
+  margin-bottom: 24px;
+  animation: fadeUp 0.7s ease-out both;
+}
+.card:nth-of-type(2) { animation-delay: 0.4s; }
+.card:nth-of-type(3) { animation-delay: 0.5s; }
+
+.card-head {
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid var(--cream-dim);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.card-head h2 {
+  font-family: var(--serif);
+  font-size: 24px;
+  font-weight: 500;
+  font-variation-settings: 'opsz' 144, 'SOFT' 40;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+.card-head h2 .idx {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--gold-deep);
+  font-weight: 500;
+}
+.card-head .ver {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+}
+
+.card-body { padding: 24px 28px 28px; }
+
+.field { margin-bottom: 18px; }
+.field:last-of-type { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.field label .req { color: var(--rust); margin-left: 4px; }
+.field-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 6px;
+  line-height: 1.55;
+}
+.field-hint code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--cream-soft);
+  padding: 1px 5px;
+  color: var(--ink-soft);
+}
+
+input[type=password],
+input[type=text],
+input[type=file],
+textarea {
+  width: 100%;
+  background: #fbf6ea;
+  border: 1px solid var(--cream-dim);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  padding: 11px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input[type=file] {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+input[type=file]::file-selector-button {
+  background: var(--green-deep);
+  color: var(--cream);
+  border: none;
+  padding: 6px 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+input[type=file]::file-selector-button:hover { background: var(--green-mid); }
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.6;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(60,90,61,0.12);
+}
+
+.btn-row { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.btn {
+  background: var(--green-deep);
+  color: var(--cream);
+  border: none;
+  padding: 13px 28px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.btn:hover { background: var(--green-mid); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { background: var(--ink-faint); cursor: not-allowed; }
+.btn.ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--cream-dim);
+}
+.btn.ghost:hover {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+  background: var(--cream-soft);
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1px;
+  background: var(--cream-dim);
+  border: 1px solid var(--cream-dim);
+  margin-top: 18px;
+}
+.meta-cell { background: var(--cream-soft); padding: 11px 14px; }
+.meta-cell .k {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.meta-cell .v {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.status {
+  padding: 12px 18px;
+  margin-top: 18px;
+  font-size: 13.5px;
+  border-left: 3px solid;
+  background: var(--cream-soft);
+  display: none;
+  line-height: 1.6;
+}
+.status.show { display: block; animation: fadeIn 0.25s; }
+.status.ok { border-color: var(--moss); color: #4a6536; }
+.status.err { border-color: var(--rust); color: #7a3925; background: rgba(168,90,60,0.06); }
+.status.info { border-color: var(--gold); color: var(--gold-deep); }
+
+.output {
+  background: #fbf6ea;
+  border: 1px solid var(--cream-dim);
+  padding: 18px 20px;
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 60vh;
+  overflow-y: auto;
+  color: var(--ink);
+  display: none;
+}
+.output.show { display: block; animation: fadeIn 0.3s; }
+.output-head {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--green-deep);
+  color: var(--cream);
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.output-head.show { display: flex; }
+.output-head + .output { margin-top: 0; }
+.copy-btn {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(243,232,212,0.3);
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: var(--sans);
+  letter-spacing: 0.05em;
+  transition: background 0.15s;
+}
+.copy-btn:hover { background: rgba(243,232,212,0.1); }
+
+details {
+  margin-top: 16px;
+  border: 1px solid var(--cream-dim);
+  background: var(--cream-soft);
+}
+details summary {
+  cursor: pointer;
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+details summary::-webkit-details-marker { display: none; }
+details summary::after {
+  content: '+';
+  font-family: var(--mono);
+  font-size: 16px;
+  color: var(--gold-deep);
+  transition: transform 0.2s;
+}
+details[open] summary::after { content: '−'; }
+details summary:hover { color: var(--ink); }
+details pre {
+  padding: 0 18px 18px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+footer {
+  max-width: 980px;
+  margin: 60px auto 0;
+  padding: 32px 24px 24px;
+  border-top: 1px solid var(--cream-dim);
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  line-height: 1.8;
+}
+footer .grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-bottom: 24px;
+}
+footer h3 {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: 0;
+}
+footer code {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--cream-soft);
+  padding: 1px 6px;
+  color: var(--gold-deep);
+}
+footer a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-decoration-color: var(--cream-dim);
+  text-underline-offset: 3px;
+  transition: color 0.15s;
+}
+footer a:hover { color: var(--gold-deep); }
+.copyleft {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+  padding-top: 16px;
+  border-top: 1px solid var(--cream-dim);
+  line-height: 1.8;
+}
+.copyleft em {
+  font-style: italic;
+  color: var(--gold-deep);
+  font-family: var(--serif);
+  font-size: 12px;
+  letter-spacing: 0;
+}
+
+/* Download link */
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
+  background: var(--green-deep);
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--green-deep);
+  transition: background 0.15s, transform 0.05s;
+}
+.download-link:hover {
+  background: var(--green-mid);
+  color: var(--cream);
+  text-decoration: none;
+}
+.download-link:active { transform: translateY(1px); }
+.download-link .dl-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 56px 20px 160px; }
+  .brand-text h1 { font-size: 42px; }
+  .tagline { font-size: 28px; }
+  .subtitle { font-size: 15px; }
+  main { padding: 0 20px 60px; margin-top: -120px; }
+  .card-head, .card-body { padding-left: 20px; padding-right: 20px; }
+  footer .grid { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-label="Lastleaf logo">
+        <path d="M 32 6
+                 C 14 14, 8 32, 12 48
+                 C 12 52, 16 56, 22 56
+                 C 38 56, 54 42, 56 22
+                 C 56 14, 50 8, 42 8
+                 C 38 8, 34 6, 32 6 Z"
+              fill="none" stroke="#f3e8d4" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M 14 50 Q 30 32, 52 14" stroke="#b89150" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M 22 44 Q 28 38, 32 36" stroke="#5f7d4f" stroke-width="0.8" fill="none" opacity="0.7"/>
+        <path d="M 28 38 Q 36 30, 42 28" stroke="#5f7d4f" stroke-width="0.8" fill="none" opacity="0.7"/>
+        <path d="M 36 32 Q 42 26, 48 22" stroke="#5f7d4f" stroke-width="0.8" fill="none" opacity="0.7"/>
+      </svg>
+      <div class="brand-text">
+        <h1>Lastleaf</h1>
+        <div class="meta">Recovery Toolkit</div>
+      </div>
+    </div>
+
+    <div class="tagline">
+      When the original tool is gone,<br>
+      you can <em>still</em> open your own notes.
+    </div>
+    <div class="subtitle">
+      An independent decryptor for <code>Meld Encrypt</code>. Algorithm constants reproduced 1:1
+      from the official source. Everything runs locally in your browser — passwords and ciphertext
+      never leave this page.
+    </div>
+  </div>
+</section>
+
+<main>
+
+  <div class="alert">
+    <span class="label">Before you use this</span>
+    This tool exists for <strong>future you</strong>. Make sure: ① this page is cached or saved locally,
+    ② a copy lives in a private Git repo, and ③ the address bar shows
+    <code>lastleaf.encveil.dev</code>. If not, stop and verify.
+  </div>
+
+  <!-- ========== 01 Whole-note decryption ========== -->
+  <section class="card">
+    <div class="card-head">
+      <h2><span class="idx">01</span> Whole-Note Decryption</h2>
+      <span class="ver">FileData · JSON · v1.0 / v2.0</span>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>Option A · Select an encrypted note file</label>
+        <input type="file" id="file-input" accept=".md,.json,.mdenc,text/*">
+        <div class="field-hint">A Meld Encrypt whole-note file is JSON with <code>version</code>, <code>hint</code>, and <code>encodedData</code> fields, typically with a <code>.md</code> extension.</div>
+      </div>
+
+      <div class="field">
+        <label>Option B · Paste JSON directly</label>
+        <textarea id="file-json" placeholder='{
+  "version": "2.0",
+  "hint": "(optional hint)",
+  "encodedData": "base64..."
+}' spellcheck="false"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Password<span class="req">*</span></label>
+        <input type="password" id="file-pwd" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="file-decrypt-btn">Decrypt Note</button>
+        <button class="btn ghost" id="file-clear-btn" type="button">Clear</button>
+      </div>
+
+      <div id="file-meta"></div>
+      <div class="status" id="file-status"></div>
+      <div class="output-head" id="file-output-head">
+        <span>Plaintext Output</span>
+        <button class="copy-btn" data-target="file-output">Copy</button>
+      </div>
+      <div class="output" id="file-output"></div>
+    </div>
+  </section>
+
+  <!-- ========== 02 Inline decryption ========== -->
+  <section class="card">
+    <div class="card-head">
+      <h2><span class="idx">02</span> Inline Fragment Decryption</h2>
+      <span class="ver">Inline · %%🔐 / %%🔐α / %%🔐β</span>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>Encrypted Fragment</label>
+        <textarea id="inline-cipher" placeholder="e.g. %%🔐β BASE64_DATA hint%%
+or just the base64 portion" spellcheck="false"></textarea>
+        <div class="field-hint">Wrapped in <code>%%...%%</code> or prefixed with <code>🔐α</code> / <code>🔐β</code> — both are auto-detected. Without a prefix, v2 is assumed.</div>
+      </div>
+
+      <div class="field">
+        <label>Password<span class="req">*</span></label>
+        <input type="password" id="inline-pwd" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="inline-decrypt-btn">Decrypt Fragment</button>
+        <button class="btn ghost" id="inline-clear-btn" type="button">Clear</button>
+      </div>
+
+      <div id="inline-meta"></div>
+      <div class="status" id="inline-status"></div>
+      <div class="output-head" id="inline-output-head">
+        <span>Plaintext Output</span>
+        <button class="copy-btn" data-target="inline-output">Copy</button>
+      </div>
+      <div class="output" id="inline-output"></div>
+    </div>
+  </section>
+
+  <!-- ========== 03 Algorithm archive ========== -->
+  <section class="card">
+    <div class="card-head">
+      <h2><span class="idx">03</span> Algorithm Archive</h2>
+      <span class="ver">For Future Reference</span>
+    </div>
+    <div class="card-body">
+      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.7;margin-bottom:14px;">
+        The three constant sets below are reproduced exactly from Meld Encrypt's
+        <code style="font-family:var(--mono);font-size:11.5px;background:var(--cream-soft);padding:1px 5px;">src/services/CryptoHelper*.ts</code>.
+        The full decryption logic lives in the <code style="font-family:var(--mono);font-size:11.5px;background:var(--cream-soft);padding:1px 5px;">&lt;script&gt;</code> tag below — view source to audit.
+      </p>
+
+      <details>
+        <summary>v0 · Obsolete · earliest format</summary>
+        <pre>prefix : 🔐 / %%🔐
+key    = SHA-256(utf8(password))
+iv     = [196,190,240,190,188,78,41,132,15,220,84,211]   // 12 bytes, hardcoded
+cipher = AES-256-GCM(key, iv).encrypt(utf8(text))
+output = base64(cipher)</pre>
+      </details>
+
+      <details>
+        <summary>v1 · CryptoHelper · legacy whole-note + α inline</summary>
+        <pre>prefix : 🔐α / %%🔐α    ·    FileData "version": "1.0"
+salt   = utf8("XHWnDAT6ehMVY2zD")              // 16 bytes, hardcoded
+key    = PBKDF2-SHA256(utf8(password), salt, 1000) → AES-256
+iv     = random(16)
+cipher = AES-256-GCM(key, iv).encrypt(utf8(text))
+output = base64(iv ‖ cipher)</pre>
+      </details>
+
+      <details open>
+        <summary>v2 · CryptoHelper2304 · <strong>current default</strong></summary>
+        <pre>prefix : 🔐β / %%🔐β    ·    FileData "version": "2.0"
+salt   = random(16)
+iv     = random(16)
+key    = PBKDF2-SHA512(utf8(password), salt, 210000) → AES-256
+cipher = AES-256-GCM(key, iv).encrypt(utf8(text))
+output = base64(iv ‖ salt ‖ cipher)</pre>
+      </details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="grid">
+    <div>
+      <h3>About this tool</h3>
+      <p>Lastleaf is a third-party recovery decryptor for <a href="https://github.com/meld-cp/obsidian-encrypt" target="_blank" rel="noopener">Meld Encrypt</a>. It exists for the day the plugin is abandoned, Obsidian breaks compatibility, or you move to a new machine and can't find the old tools. As long as you remember the password, your notes can be opened.</p>
+      <p style="margin-top:10px;">The implementation is based entirely on the public source code. It does not depend on the original plugin and makes no external calls. The Web Crypto API is a W3C standard and will be around for decades.</p>
+      <p style="margin-top:14px;" id="download-row">
+        <a href="/lastleaf.zip" download class="download-link" id="download-link">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:6px;">
+            <path d="M8 2v9M4 7l4 4 4-4M2 14h12"/>
+          </svg>
+          Download offline copy
+          <span class="dl-meta">(.zip · run it locally, forever)</span>
+        </a>
+      </p>
+      <p style="margin-top:14px;display:none;" id="offline-notice">
+        <span style="display:inline-block;padding:6px 12px;background:rgba(109,138,78,0.12);border-left:2px solid var(--moss);font-size:12px;color:#4a6536;font-family:var(--mono);">
+          ✓ You are running this offline (file://). No further setup needed.
+        </span>
+      </p>
+    </div>
+    <div>
+      <h3>Keep copies in</h3>
+      <p>① Local <code>~/Documents/</code><br>
+         ② A private Git repo<br>
+         ③ <code>lastleaf.encveil.dev</code></p>
+      <p style="margin-top:10px;">Any one of the three is enough.</p>
+    </div>
+  </div>
+  <div class="copyleft">
+    Lastleaf · one of many small tools against black-box power<br>
+    Part of the encveil.dev toolkit · <em>Seek truth from facts.</em>
+  </div>
+</footer>
+
+<script>
+'use strict';
+
+const utf8Enc = new TextEncoder();
+const utf8Dec = new TextDecoder();
+
+function b64ToBytes(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+
+// ---------- v0 · Obsolete ----------
+const OBSOLETE_IV = new Uint8Array([196,190,240,190,188,78,41,132,15,220,84,211]);
+async function decryptV0(b64, password) {
+  const digest = await crypto.subtle.digest('SHA-256', utf8Enc.encode(password));
+  const key = await crypto.subtle.importKey('raw', digest, { name: 'AES-GCM' }, false, ['decrypt']);
+  const cipher = b64ToBytes(b64);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: OBSOLETE_IV, tagLength: 128 }, key, cipher);
+  return utf8Dec.decode(plain);
+}
+
+// ---------- v1 · CryptoHelper ----------
+const V1_SALT = utf8Enc.encode('XHWnDAT6ehMVY2zD');
+const V1_ITERATIONS = 1000;
+const V1_IV_SIZE = 16;
+async function deriveKeyV1(password) {
+  const baseKey = await crypto.subtle.importKey('raw', utf8Enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', hash: 'SHA-256', salt: V1_SALT, iterations: V1_ITERATIONS },
+    baseKey, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+  );
+}
+async function decryptV1(b64, password) {
+  const bytes = b64ToBytes(b64);
+  const iv = bytes.slice(0, V1_IV_SIZE);
+  const cipher = bytes.slice(V1_IV_SIZE);
+  const key = await deriveKeyV1(password);
+  return utf8Dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipher));
+}
+
+// ---------- v2 · CryptoHelper2304 ----------
+const V2_IV_SIZE = 16;
+const V2_SALT_SIZE = 16;
+const V2_ITERATIONS = 210000;
+async function deriveKeyV2(password, salt) {
+  const baseKey = await crypto.subtle.importKey('raw', utf8Enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', hash: 'SHA-512', salt, iterations: V2_ITERATIONS },
+    baseKey, { name: 'AES-GCM', length: 256 }, false, ['decrypt']
+  );
+}
+async function decryptV2(b64, password) {
+  const bytes = b64ToBytes(b64);
+  const iv = bytes.slice(0, V2_IV_SIZE);
+  const salt = bytes.slice(V2_IV_SIZE, V2_IV_SIZE + V2_SALT_SIZE);
+  const cipher = bytes.slice(V2_IV_SIZE + V2_SALT_SIZE);
+  const key = await deriveKeyV2(password, salt);
+  return utf8Dec.decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipher));
+}
+
+// ---------- Whole-note ----------
+async function decryptFileData(jsonText, password) {
+  let parsed;
+  try { parsed = JSON.parse(jsonText); }
+  catch (e) { throw new Error('Not valid JSON: ' + e.message); }
+  const { version, hint, encodedData } = parsed;
+  if (!encodedData) throw new Error('Missing "encodedData" field — this may not be a Meld Encrypt note.');
+  let plaintext;
+  if (version === '1.0') plaintext = await decryptV1(encodedData, password);
+  else if (version === '2.0') plaintext = await decryptV2(encodedData, password);
+  else throw new Error(`Unknown file version: ${version} (supports 1.0 / 2.0)`);
+  return { plaintext, version, hint: hint || '(none)' };
+}
+
+// ---------- Inline ----------
+function parseInlineCipher(raw) {
+  let text = raw.trim();
+  if (text.startsWith('%%') && text.endsWith('%%')) text = text.slice(2, -2).trim();
+  let version, body;
+  if (text.startsWith('🔐α ')) { version = 1; body = text.slice('🔐α '.length); }
+  else if (text.startsWith('🔐β ')) { version = 2; body = text.slice('🔐β '.length); }
+  else if (text.startsWith('🔐 ')) { version = 0; body = text.slice('🔐 '.length); }
+  else { version = 2; body = text; }
+  const spaceIdx = body.indexOf(' ');
+  let b64, hint;
+  if (spaceIdx === -1) { b64 = body; hint = null; }
+  else { b64 = body.slice(0, spaceIdx); hint = body.slice(spaceIdx + 1); }
+  return { version, b64, hint };
+}
+async function decryptInline(raw, password) {
+  const { version, b64, hint } = parseInlineCipher(raw);
+  let plaintext;
+  if (version === 0) plaintext = await decryptV0(b64, password);
+  else if (version === 1) plaintext = await decryptV1(b64, password);
+  else if (version === 2) plaintext = await decryptV2(b64, password);
+  else throw new Error('Unrecognized version');
+  return { plaintext, version, hint: hint || '(none)' };
+}
+
+// ============================================================
+// UI
+// ============================================================
+const $ = (id) => document.getElementById(id);
+
+function setStatus(elId, type, msg) {
+  const el = $(elId);
+  el.className = 'status show ' + type;
+  el.textContent = msg;
+}
+function clearStatus(elId) { $(elId).className = 'status'; $(elId).textContent = ''; }
+
+function setMeta(elId, fields) {
+  const el = $(elId);
+  if (!fields) { el.innerHTML = ''; return; }
+  const cells = fields.map(([k, v]) =>
+    `<div class="meta-cell"><div class="k">${k}</div><div class="v">${escapeHtml(String(v))}</div></div>`
+  ).join('');
+  el.innerHTML = `<div class="meta-grid">${cells}</div>`;
+}
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+function showOutput(headId, outId, text) {
+  $(headId).classList.add('show');
+  const out = $(outId);
+  out.classList.add('show');
+  out.textContent = text;
+}
+function hideOutput(headId, outId) {
+  $(headId).classList.remove('show');
+  $(outId).classList.remove('show');
+  $(outId).textContent = '';
+}
+function versionLabel(v) {
+  return ({ 0: 'v0 · Obsolete', 1: 'v1 · CryptoHelper', 2: 'v2 · CryptoHelper2304' })[v] || 'unknown';
+}
+
+// --- Whole-note ---
+$('file-input').addEventListener('change', async (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const txt = await f.text();
+  $('file-json').value = txt;
+  setStatus('file-status', 'info', `Loaded file: ${f.name} (${f.size} bytes)`);
+});
+
+$('file-decrypt-btn').addEventListener('click', async () => {
+  const json = $('file-json').value.trim();
+  const pwd = $('file-pwd').value;
+  hideOutput('file-output-head', 'file-output');
+  setMeta('file-meta', null);
+
+  if (!json) { setStatus('file-status', 'err', 'Please provide the encrypted note JSON.'); return; }
+  if (!pwd) { setStatus('file-status', 'err', 'Please enter a password.'); return; }
+
+  const btn = $('file-decrypt-btn');
+  btn.disabled = true; btn.textContent = 'Deriving key…';
+  setStatus('file-status', 'info', 'Deriving key and decrypting… (v2 takes 1–3 seconds for 210,000 PBKDF2 rounds)');
+
+  try {
+    const t0 = performance.now();
+    const { plaintext, version, hint } = await decryptFileData(json, pwd);
+    const dt = (performance.now() - t0).toFixed(0);
+    setMeta('file-meta', [
+      ['VERSION', versionLabel(version === '1.0' ? 1 : 2)],
+      ['HINT', hint],
+      ['BYTES', new Blob([plaintext]).size],
+      ['ELAPSED', dt + ' ms'],
+    ]);
+    setStatus('file-status', 'ok', '✓ Decryption successful.');
+    showOutput('file-output-head', 'file-output', plaintext);
+  } catch (e) {
+    setStatus('file-status', 'err', '✗ Decryption failed: ' + (e.message || e.name || 'unknown error') + ' (most likely cause: wrong password)');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Decrypt Note';
+  }
+});
+
+$('file-clear-btn').addEventListener('click', () => {
+  $('file-input').value = '';
+  $('file-json').value = '';
+  $('file-pwd').value = '';
+  hideOutput('file-output-head', 'file-output');
+  setMeta('file-meta', null);
+  clearStatus('file-status');
+});
+
+// --- Inline ---
+$('inline-decrypt-btn').addEventListener('click', async () => {
+  const raw = $('inline-cipher').value;
+  const pwd = $('inline-pwd').value;
+  hideOutput('inline-output-head', 'inline-output');
+  setMeta('inline-meta', null);
+
+  if (!raw.trim()) { setStatus('inline-status', 'err', 'Please provide an encrypted fragment.'); return; }
+  if (!pwd) { setStatus('inline-status', 'err', 'Please enter a password.'); return; }
+
+  const btn = $('inline-decrypt-btn');
+  btn.disabled = true; btn.textContent = 'Decrypting…';
+  setStatus('inline-status', 'info', 'Decrypting…');
+
+  try {
+    const t0 = performance.now();
+    const { plaintext, version, hint } = await decryptInline(raw, pwd);
+    const dt = (performance.now() - t0).toFixed(0);
+    setMeta('inline-meta', [
+      ['VERSION', versionLabel(version)],
+      ['HINT', hint],
+      ['BYTES', new Blob([plaintext]).size],
+      ['ELAPSED', dt + ' ms'],
+    ]);
+    setStatus('inline-status', 'ok', '✓ Decryption successful.');
+    showOutput('inline-output-head', 'inline-output', plaintext);
+  } catch (e) {
+    setStatus('inline-status', 'err', '✗ Decryption failed: ' + (e.message || e.name || 'unknown error') + ' (wrong password, or version prefix mismatch)');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Decrypt Fragment';
+  }
+});
+
+$('inline-clear-btn').addEventListener('click', () => {
+  $('inline-cipher').value = '';
+  $('inline-pwd').value = '';
+  hideOutput('inline-output-head', 'inline-output');
+  setMeta('inline-meta', null);
+  clearStatus('inline-status');
+});
+
+// --- Copy ---
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const target = $(btn.dataset.target);
+    if (!target.textContent) return;
+    try {
+      await navigator.clipboard.writeText(target.textContent);
+      const orig = btn.textContent;
+      btn.textContent = 'Copied';
+      setTimeout(() => { btn.textContent = orig; }, 1500);
+    } catch (e) {
+      btn.textContent = 'Failed';
+    }
+  });
+});
+
+// Hide download link when running offline; show "already offline" notice instead.
+// This keeps the deployed version inviting downloads, while the local copy doesn't
+// pretend it can re-download itself.
+if (location.protocol === 'file:') {
+  console.log('%cLastleaf · fully offline mode (file://)', 'color:#b89150;font-weight:bold');
+  const dlRow = document.getElementById('download-row');
+  const offlineNotice = document.getElementById('offline-notice');
+  if (dlRow) dlRow.style.display = 'none';
+  if (offlineNotice) offlineNotice.style.display = 'block';
+}
+console.log('%cLastleaf · Meld Encrypt Recovery Toolkit', 'color:#2f4a30;font-size:14px;font-weight:bold');
+console.log('Source: this page\'s <script> tag · Algorithm reference: github.com/meld-cp/obsidian-encrypt');
+</script>
+</body>
+</html>

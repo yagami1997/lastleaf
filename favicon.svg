@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 深绿圆角方形底 -->
+  <rect width="64" height="64" rx="14" fill="#2f4a30"/>
+  
+  <!-- 单叶剪影：米色实心，造型加宽一点点让小尺寸更稳 -->
+  <path d="M 32 11
+           C 17 17, 11 32, 15 47
+           C 15 50, 19 53, 24 53
+           C 37 53, 51 41, 53 23
+           C 53 16, 47 11, 40 11
+           C 36 11, 34 11, 32 11 Z"
+        fill="#f3e8d4"/>
+  
+  <!-- 主叶脉：金色粗线，是这枚 favicon 在小尺寸下唯一的"细节"，必须显眼 -->
+  <path d="M 17 48 Q 30 33, 49 17"
+        stroke="#b89150" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
