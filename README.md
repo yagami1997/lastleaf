@@ -1,24 +1,24 @@
 # Lastleaf
 
-> When the original tool is gone, you can still open your own notes.
+**An offline recovery toolkit for Meld Encrypt notes.**
 
-Lastleaf is a small, standalone recovery decryptor for notes encrypted with the [Meld Encrypt](https://github.com/meld-cp/obsidian-encrypt) Obsidian plugin.
+Lastleaf is a small, standalone decryptor for notes encrypted with the [Meld Encrypt](https://github.com/meld-cp/obsidian-encrypt) Obsidian plugin. It is built for one purpose: helping you open your own encrypted notes when the original plugin is no longer close at hand.
 
-It is a single-page web tool. Open `index.html`, paste or select encrypted content, enter the password, and recover the plaintext locally in your browser. There is no server, account, package manager, build step, analytics, or telemetry.
+Open `index.html`, provide the encrypted note or inline fragment, enter the password, and recover the plaintext locally in your browser.
+
+No server. No account. No build step. No telemetry.
 
 Created in Los Angeles on **May 23, 2026 at 8:51 PM PDT**.
 
-## Note
+## What It Does
 
-Encryption is an act of trust in the future. We encrypt because some things should remain private, but privacy should not turn into accidental loss just because a plugin is abandoned, a platform changes, or an old development environment disappears.
+- Decrypts Meld Encrypt whole-note JSON files.
+- Decrypts inline encrypted fragments.
+- Supports the known v0, v1, and v2 Meld Encrypt formats.
+- Runs locally through the browser's Web Crypto API.
+- Works as a static file and can be saved for offline use.
 
-Lastleaf exists for that narrow but important case: you still have the encrypted notes, you still know the password, but the original tool is no longer conveniently available. The goal is not to replace Meld Encrypt or weaken its model. The goal is to preserve access to your own writing through a quiet, auditable, offline artifact that can survive longer than any one app, maintainer, or hosting account.
-
-This project is intentionally plain. Its value comes from being easy to inspect, easy to save, and easy to run years later.
-
-## What It Supports
-
-Lastleaf decrypts the known Meld Encrypt formats:
+## Supported Formats
 
 | Format | Marker | Notes |
 | --- | --- | --- |
@@ -28,17 +28,17 @@ Lastleaf decrypts the known Meld Encrypt formats:
 
 Whole-note encrypted files are JSON objects containing `version`, `hint`, and `encodedData`.
 
-## How To Use
+## Usage
 
 Open `index.html` in a modern browser.
 
-You can decrypt either:
+You can decrypt:
 
 - a whole encrypted note file;
 - a pasted Meld Encrypt JSON payload;
 - an inline encrypted fragment.
 
-All cryptographic work happens through the browser's Web Crypto API. Passwords and ciphertext remain on the local page.
+Passwords and ciphertext stay on the local page. The application does not send your data anywhere.
 
 ## Security Boundaries
 
@@ -56,6 +56,14 @@ Lastleaf cannot help when:
 - the copy of `index.html` you are using has been modified maliciously.
 
 Before using a downloaded copy with real notes, inspect `index.html` directly. The decryption logic is part of the page source.
+
+## Note
+
+Encryption is a promise made to a future self: the contents should stay private, but they should not become unreachable simply because a tool disappeared.
+
+Lastleaf exists for that narrow space between privacy and loss. It does not try to replace Meld Encrypt, weaken its assumptions, or recover forgotten passwords. It only preserves the path back to notes you already own, encrypted with a password you still remember.
+
+That is why this project is deliberately plain. A recovery tool should be easy to read, easy to save, and boring enough to survive years of changing platforms.
 
 ## Project Structure
 
