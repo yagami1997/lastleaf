@@ -62,3 +62,8 @@ out/
 CLAUDE.local.md
 GEMINI.local.md
 AGENTS.local.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
