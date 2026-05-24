@@ -1,6 +1,6 @@
 <div align="center">
 
-# Lastleaf
+# 🍂 Lastleaf
 
 **An offline recovery toolkit for Meld Encrypt notes**
 
@@ -18,18 +18,18 @@ No server. No account. No build step. No telemetry.
 
 Created in Los Angeles on **May 23, 2026 at 8:51 PM PDT**.
 
-## Overview
+## ✦ Overview
 
 | Property | Detail |
 | --- | --- |
-| Runtime | Browser only |
-| Crypto API | Web Crypto API |
-| Network requirement | None after the page is loaded |
-| Build system | None |
-| Primary file | `index.html` |
-| Supported content | Whole-note JSON and inline fragments |
+| 🧭 Runtime | Browser only |
+| 🔐 Crypto API | Web Crypto API |
+| 🌿 Network requirement | None after the page is loaded |
+| 🧱 Build system | None |
+| 📄 Primary file | `index.html` |
+| 🗂️ Supported content | Whole-note JSON and inline fragments |
 
-## Usage
+## 🚪 Usage
 
 Open `index.html` in a modern browser.
 
@@ -41,7 +41,7 @@ You can decrypt:
 
 Passwords and ciphertext stay on the local page. Lastleaf does not upload, log, or transmit your data.
 
-## Supported Formats
+## 🔐 Supported Formats
 
 | Format | Marker | Notes |
 | --- | --- | --- |
@@ -51,7 +51,7 @@ Passwords and ciphertext stay on the local page. Lastleaf does not upload, log, 
 
 Whole-note encrypted files are JSON objects containing `version`, `hint`, and `encodedData`.
 
-## Design Philosophy
+## 🪶 Design Philosophy
 
 Lastleaf is designed to be boring in the best sense of the word.
 
@@ -63,7 +63,7 @@ Lastleaf is designed to be boring in the best sense of the word.
 
 **Respectful of the original model.** Lastleaf does not recover forgotten passwords and does not weaken Meld Encrypt. It only preserves access for the person who already has both the ciphertext and the password.
 
-## Note
+## 📝 Note
 
 Encryption is a promise made across time. It protects a private present, but it also asks the future to remember enough context to open what was sealed.
 
@@ -71,7 +71,7 @@ Software does not always keep that promise for us. Plugins disappear, APIs drift
 
 The point is not to distrust tools. The point is to avoid confusing a tool with ownership. If the notes are yours, the password is yours, and the ciphertext is yours, the ability to return to them should remain yours as well.
 
-## Security Boundaries
+## 🛡️ Security Boundaries
 
 Lastleaf can help when:
 
@@ -88,11 +88,11 @@ Lastleaf cannot help when:
 
 Before using a downloaded copy with real notes, inspect `index.html` directly. The decryption logic is part of the page source.
 
-## Deployment Guide
+## 🚀 Deployment Guide
 
 Lastleaf is a static site. It can be deployed anywhere that serves plain files.
 
-### Cloudflare Pages
+### ☁️ Cloudflare Pages
 
 Use a normal Pages project, not a Worker Git deployment.
 
@@ -105,11 +105,11 @@ Use a normal Pages project, not a Worker Git deployment.
 
 The included `_headers` file is intended for Cloudflare Pages. No `wrangler.jsonc` file is required.
 
-### Static Hosts
+### 🌐 Static Hosts
 
 For any other static host, serve the repository root. The only required runtime file is `index.html`; the favicon assets and `lastleaf.zip` are optional supporting files.
 
-### Local Use
+### 💾 Local Use
 
 Open `index.html` directly, or serve the directory with any static file server:
 
@@ -117,7 +117,7 @@ Open `index.html` directly, or serve the directory with any static file server:
 python3 -m http.server
 ```
 
-## Project Structure
+## 🧩 Project Structure
 
 ```text
 lastleaf/
@@ -131,13 +131,13 @@ lastleaf/
 └── README.md
 ```
 
-## Attribution
+## 🙏 Attribution
 
 Lastleaf is an independent third-party tool. It is not affiliated with or endorsed by the Meld Encrypt project.
 
 The decryption behavior is based on the public Meld Encrypt implementation in [`meld-cp/obsidian-encrypt`](https://github.com/meld-cp/obsidian-encrypt).
 
-## License
+## 📜 License
 
 Released under the [MIT License](LICENSE).
 
