@@ -75,6 +75,7 @@ lastleaf/
 ├── favicon-180.png
 ├── lastleaf.zip
 ├── _headers
+├── LICENSE
 └── README.md
 ```
 
