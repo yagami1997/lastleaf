@@ -1,32 +1,33 @@
+<div align="center">
+
 # Lastleaf
 
-**An offline recovery toolkit for Meld Encrypt notes.**
+**An offline recovery toolkit for Meld Encrypt notes**
 
-Lastleaf is a small, standalone decryptor for notes encrypted with the [Meld Encrypt](https://github.com/meld-cp/obsidian-encrypt) Obsidian plugin. It is built for one purpose: helping you open your own encrypted notes when the original plugin is no longer close at hand.
+When the original tool is gone, your notes should not be gone with it.
 
-Open `index.html`, provide the encrypted note or inline fragment, enter the password, and recover the plaintext locally in your browser.
+</div>
+
+---
+
+Lastleaf is a standalone, single-page decryptor for notes encrypted with the [Meld Encrypt](https://github.com/meld-cp/obsidian-encrypt) Obsidian plugin.
+
+It exists for a narrow recovery case: you still have the encrypted notes, you still remember the password, but the original plugin or environment is no longer available. Open `index.html`, provide the encrypted content, enter the password, and recover the plaintext locally in your browser.
 
 No server. No account. No build step. No telemetry.
 
 Created in Los Angeles on **May 23, 2026 at 8:51 PM PDT**.
 
-## What It Does
+## Overview
 
-- Decrypts Meld Encrypt whole-note JSON files.
-- Decrypts inline encrypted fragments.
-- Supports the known v0, v1, and v2 Meld Encrypt formats.
-- Runs locally through the browser's Web Crypto API.
-- Works as a static file and can be saved for offline use.
-
-## Supported Formats
-
-| Format | Marker | Notes |
-| --- | --- | --- |
-| v0 | `%%🔐 ... %%` | Earliest inline encryption format. |
-| v1 | `%%🔐α ... %%` or `version: "1.0"` | Legacy CryptoHelper format. |
-| v2 | `%%🔐β ... %%` or `version: "2.0"` | CryptoHelper2304 format and the current default when this tool was written. |
-
-Whole-note encrypted files are JSON objects containing `version`, `hint`, and `encodedData`.
+| Property | Detail |
+| --- | --- |
+| Runtime | Browser only |
+| Crypto API | Web Crypto API |
+| Network requirement | None after the page is loaded |
+| Build system | None |
+| Primary file | `index.html` |
+| Supported content | Whole-note JSON and inline fragments |
 
 ## Usage
 
@@ -38,7 +39,29 @@ You can decrypt:
 - a pasted Meld Encrypt JSON payload;
 - an inline encrypted fragment.
 
-Passwords and ciphertext stay on the local page. The application does not send your data anywhere.
+Passwords and ciphertext stay on the local page. Lastleaf does not upload, log, or transmit your data.
+
+## Supported Formats
+
+| Format | Marker | Notes |
+| --- | --- | --- |
+| v0 | `%%🔐 ... %%` | Earliest inline encryption format. |
+| v1 | `%%🔐α ... %%` or `version: "1.0"` | Legacy CryptoHelper format. |
+| v2 | `%%🔐β ... %%` or `version: "2.0"` | CryptoHelper2304 format and the current default when this tool was written. |
+
+Whole-note encrypted files are JSON objects containing `version`, `hint`, and `encodedData`.
+
+## Design Philosophy
+
+Lastleaf is designed to be boring in the best sense of the word.
+
+**Local first.** Recovery should not depend on an account, a server, or a third-party API. The page can be opened from disk and used offline.
+
+**Auditable by inspection.** The implementation lives in `index.html`. A future user should be able to open the file, read the source, and understand what is being run.
+
+**Small enough to preserve.** A recovery tool should be easy to copy into a private archive, a repository, or a long-term backup without carrying a toolchain with it.
+
+**Respectful of the original model.** Lastleaf does not recover forgotten passwords and does not weaken Meld Encrypt. It only preserves access for the person who already has both the ciphertext and the password.
 
 ## Security Boundaries
 
@@ -53,17 +76,38 @@ Lastleaf cannot help when:
 
 - the password has been forgotten;
 - a future Meld Encrypt version introduces a new encryption format;
-- the copy of `index.html` you are using has been modified maliciously.
+- the local copy of `index.html` has been modified maliciously.
 
 Before using a downloaded copy with real notes, inspect `index.html` directly. The decryption logic is part of the page source.
 
-## Note
+## Deployment Guide
 
-Encryption is a promise made to a future self: the contents should stay private, but they should not become unreachable simply because a tool disappeared.
+Lastleaf is a static site. It can be deployed anywhere that serves plain files.
 
-Lastleaf exists for that narrow space between privacy and loss. It does not try to replace Meld Encrypt, weaken its assumptions, or recover forgotten passwords. It only preserves the path back to notes you already own, encrypted with a password you still remember.
+### Cloudflare Pages
 
-That is why this project is deliberately plain. A recovery tool should be easy to read, easy to save, and boring enough to survive years of changing platforms.
+Use a normal Pages project, not a Worker Git deployment.
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | `None` |
+| Build command | Leave empty |
+| Build output directory | `/` |
+| Root directory | `/` |
+
+The included `_headers` file is intended for Cloudflare Pages. No `wrangler.jsonc` file is required.
+
+### Static Hosts
+
+For any other static host, serve the repository root. The only required runtime file is `index.html`; the favicon assets and `lastleaf.zip` are optional supporting files.
+
+### Local Use
+
+Open `index.html` directly, or serve the directory with any static file server:
+
+```sh
+python3 -m http.server
+```
 
 ## Project Structure
 
@@ -79,12 +123,6 @@ lastleaf/
 └── README.md
 ```
 
-There is no required development setup. Open the HTML file directly, or serve the directory with any static file server.
-
-## Deployment
-
-This repository is suitable for static hosting. The included `_headers` file is intended for Cloudflare Pages.
-
 ## Attribution
 
 Lastleaf is an independent third-party tool. It is not affiliated with or endorsed by the Meld Encrypt project.
@@ -93,4 +131,14 @@ The decryption behavior is based on the public Meld Encrypt implementation in [`
 
 ## License
 
-MIT
+Released under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+
+Lastleaf is made for future access, quiet recovery, and ownership that survives its tools.
+
+<em>Seek truth from facts.</em>
+
+</div>
